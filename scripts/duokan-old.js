@@ -1,28 +1,16 @@
 ids = [];
 const axios = require("axios");
-// require("global-agent/bootstrap");
-// global.GLOBAL_AGENT.HTTP_PROXY="http://167.99.70.25:8099";
-// global.GLOBAL_AGENT.NO_PROXY="127.*,localhost"
 axios.defaults.timeout = 3000;
 const timeAsync =  ms => new Promise(resolve => setTimeout(resolve, ms));
 let result = "【多看阅读每日任务】：";
-
 //let number = 0;
 header = {
   headers: {
     cookie: config.duokan.cookie,
   },
-
 };
-//获取device_id
-const did=config.duokan.deviceId
-
-
-
-//下面注释掉的是原本的方法
-// device = header.headers.cookie.match(/device_id=(.+?);/);
-// // did = device ? device[1] : "";
-
+device = header.headers.cookie.match(/device_id=(.+?);/);
+did = device ? device[1] : "";
 timeout = 1000; // 时间间隔 默认1s  自行修改 n*1000 app内任务一般30s一次
 const sign1 = [
   "d16ad58199c69518a4afd87b5cf0fe67",
@@ -258,7 +246,7 @@ function drawing() {
     try {
       for (m = 0; m < 6; m++) {
         let urld = `https://www.duokan.com/store/v0/event/drawing`;
-        let datad = `code=8ulcky4bknbe_f&${getc()}`;
+        let datad = `code=8ulcky4bknbe_f&${getc()}&withid=1`;
         let resd = await axios.post(urld, datad, header);
         console.log(resd.data);
       }
@@ -420,9 +408,8 @@ function info() {
     try {
       number = 0
       let url = `https://www.duokan.com/store/v0/award/coin/list`;
-      let data = `sandbox=0&${getc()}&withid=1`; //&withid=1
+      let data = `sandbox=0&${getc()}&withid=1`;
       let res = await axios.post(url, data, header);
-      console.log(res.data)
       list = res.data.data.award;
       infod = [];
       list.map(async(list) => {
@@ -452,7 +439,7 @@ function dailysign() {
       let res = await axios.post(url, getc(), header);
       msg = res.data.msg;
       console.log(msg);
-      result += msg
+      result += msg 
       await getO();
       await getchances();
       await drawingadd();
